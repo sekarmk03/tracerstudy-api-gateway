@@ -7,6 +7,7 @@ import (
 	"tracerstudy-api-gateway/pkg/utils"
 
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc/metadata"
 )
 
 type RegisterUserRequestBody struct {
@@ -18,6 +19,9 @@ type RegisterUserRequestBody struct {
 }
 
 func RegisterUser(ctx *gin.Context, c pb.AuthServiceClient) {
+	authorizationHeader := ctx.GetHeader("Authorization")
+	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
+
 	b := RegisterUserRequestBody{}
 
 	if err := ctx.BindJSON(&b); err != nil {
@@ -29,7 +33,7 @@ func RegisterUser(ctx *gin.Context, c pb.AuthServiceClient) {
 		return
 	}
 
-	res, err := c.RegisterUser(context.Background(), &pb.User{
+	res, err := c.RegisterUser(grpcCtx, &pb.User{
 		Name:     b.Name,
 		Username: b.Username,
 		Email:    b.Email,
