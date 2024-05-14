@@ -11,7 +11,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func GetAllKabkota(ctx *gin.Context, c pb.KabKotaServiceClient) {
+func GetAllKabKota(ctx *gin.Context, c pb.KabKotaServiceClient) {
 	authorizationHeader := ctx.GetHeader("Authorization")
 	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
 

@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-func GetKabkotaByIdWil(ctx *gin.Context, c pb.KabKotaServiceClient) {
+func GetKabKotaByIdWil(ctx *gin.Context, c pb.KabKotaServiceClient) {
 	idWil := ctx.Param("id")
 
 	authorizationHeader := ctx.GetHeader("Authorization")

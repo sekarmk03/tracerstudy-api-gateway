@@ -5,6 +5,7 @@ import (
 	"tracerstudy-api-gateway/pkg/config"
 	"tracerstudy-api-gateway/pkg/modules/auth/auth"
 	"tracerstudy-api-gateway/pkg/modules/auth/user"
+	"tracerstudy-api-gateway/pkg/modules/tracer/kabkota"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,6 +21,7 @@ func main() {
 
 	auth.RegisterRoutes(r, &c)
 	user.RegisterRoutes(r, &c)
+	kabkota.RegisterRoutes(r, &c)
 
 	r.Run(c.Port)
 }
