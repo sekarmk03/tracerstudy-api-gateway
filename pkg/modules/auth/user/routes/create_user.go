@@ -4,8 +4,10 @@ import (
 	"context"
 	"net/http"
 	"tracerstudy-api-gateway/pkg/pb"
+	"tracerstudy-api-gateway/pkg/utils"
 
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc/metadata"
 )
 
 type CreateUserRequestBody struct {
@@ -17,14 +19,21 @@ type CreateUserRequestBody struct {
 }
 
 func CreateUser(ctx *gin.Context, c pb.UserServiceClient) {
+	authorizationHeader := ctx.GetHeader("Authorization")
+	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
+	
 	b := CreateUserRequestBody{}
 
 	if err := ctx.BindJSON(&b); err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+		errResp := utils.NewErrorResponse(http.StatusBadRequest, "Bad Request", "Invalid request body")
+		ctx.AbortWithStatusJSON(
+			http.StatusBadRequest,
+			errResp,
+		)
 		return
 	}
 
-	res, err := c.CreateUser(context.Background(), &pb.User{
+	res, err := c.CreateUser(grpcCtx, &pb.User{
 		Name:     b.Name,
 		Username: b.Username,
 		Email:    b.Email,
@@ -33,7 +42,11 @@ func CreateUser(ctx *gin.Context, c pb.UserServiceClient) {
 	})
 
 	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
+		errResp := utils.GetGrpcError(err)
+		ctx.AbortWithStatusJSON(
+			errResp.Code,
+			errResp,
+		)
 		return
 	}
 

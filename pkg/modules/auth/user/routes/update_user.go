@@ -5,8 +5,10 @@ import (
 	"net/http"
 	"strconv"
 	"tracerstudy-api-gateway/pkg/pb"
+	"tracerstudy-api-gateway/pkg/utils"
 
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc/metadata"
 )
 
 type UpdateUserRequestBody struct {
@@ -19,18 +21,29 @@ func UpdateUser(ctx *gin.Context, c pb.UserServiceClient) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
 
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+		errResp := utils.NewErrorResponse(http.StatusBadRequest, "Bad Request", "Failed to convert id to int")
+		ctx.AbortWithStatusJSON(
+			http.StatusBadRequest,
+			errResp,
+		)
 		return
 	}
 
 	b := UpdateUserRequestBody{}
 
 	if err := ctx.BindJSON(&b); err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+		errResp := utils.NewErrorResponse(http.StatusBadRequest, "Bad Request", "Invalid request body")
+		ctx.AbortWithStatusJSON(
+			http.StatusBadRequest,
+			errResp,
+		)
 		return
 	}
 
-	res, err := c.UpdateUser(context.Background(), &pb.User{
+	authorizationHeader := ctx.GetHeader("Authorization")
+	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
+
+	res, err := c.UpdateUser(grpcCtx, &pb.User{
 		Id:       id,
 		Username: b.Username,
 		Email:    b.Email,
@@ -38,7 +51,11 @@ func UpdateUser(ctx *gin.Context, c pb.UserServiceClient) {
 	})
 
 	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
+		errResp := utils.GetGrpcError(err)
+		ctx.AbortWithStatusJSON(
+			errResp.Code,
+			errResp,
+		)
 		return
 	}
 
