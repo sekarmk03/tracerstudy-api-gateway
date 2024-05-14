@@ -10,19 +10,17 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-type CreateUserRequestBody struct {
-	Name     string `json:"name"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	RoleId   uint32 `json:"role_id"`
+type CreateKabKotaRequestBody struct {
+	IdWilayah      string `json:"id_wilayah"`
+	Nama           string `json:"nama"`
+	IdIndukWilayah string `json:"id_induk_wilayah"`
 }
 
-func CreateUser(ctx *gin.Context, c pb.UserServiceClient) {
+func CreateKabKota(ctx *gin.Context, c pb.KabKotaServiceClient) {
 	authorizationHeader := ctx.GetHeader("Authorization")
 	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
 
-	b := CreateUserRequestBody{}
+	b := CreateKabKotaRequestBody{}
 
 	if err := ctx.BindJSON(&b); err != nil {
 		errResp := utils.NewErrorResponse(http.StatusBadRequest, "Bad Request", "Invalid request body")
@@ -33,12 +31,10 @@ func CreateUser(ctx *gin.Context, c pb.UserServiceClient) {
 		return
 	}
 
-	res, err := c.CreateUser(grpcCtx, &pb.User{
-		Name:     b.Name,
-		Username: b.Username,
-		Email:    b.Email,
-		Password: b.Password,
-		RoleId:   b.RoleId,
+	res, err := c.CreateKabKota(grpcCtx, &pb.KabKota{
+		IdWil:      b.IdWilayah,
+		Nama:       b.Nama,
+		IdIndukWil: b.IdIndukWilayah,
 	})
 
 	if err != nil {
