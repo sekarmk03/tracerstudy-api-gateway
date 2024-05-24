@@ -23,6 +23,7 @@ var grpcToHttpCode = map[codes.Code]int{
 	codes.Internal:           http.StatusInternalServerError,
 	codes.Unavailable:        http.StatusServiceUnavailable,
 	codes.DataLoss:           http.StatusInternalServerError,
+	codes.AlreadyExists:      http.StatusConflict,
 }
 
 var grpcToHttpStatus = map[codes.Code]string{
@@ -42,6 +43,7 @@ var grpcToHttpStatus = map[codes.Code]string{
 	codes.Internal:           "INTERNAL_SERVER_ERROR",
 	codes.Unavailable:        "SERVICE_UNAVAILABLE",
 	codes.DataLoss:           "INTERNAL_SERVER_ERROR",
+	codes.AlreadyExists:      "CONFLICT",
 }
 
 func GrpcToHttpCode(grpcCode codes.Code) int {

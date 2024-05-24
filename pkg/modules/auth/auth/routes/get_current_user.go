@@ -11,11 +11,11 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func GetAllUsers(ctx *gin.Context, c pb.UserServiceClient) {
+func GetCurrentUser(ctx *gin.Context, c pb.AuthServiceClient) {
 	authorizationHeader := ctx.GetHeader("Authorization")
 	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
 
-	res, err := c.GetAllUsers(grpcCtx, &emptypb.Empty{})
+	res, err := c.GetCurrentUser(grpcCtx, &emptypb.Empty{})
 
 	if err != nil {
 		errResp := utils.GetGrpcError(err)

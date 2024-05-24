@@ -27,8 +27,8 @@ func LoginAlumni(ctx *gin.Context, c pb.AuthServiceClient) {
 	}
 
 	res, err := c.LoginAlumni(context.Background(), &pb.LoginAlumniRequest{
-		Nim:       b.Nim,
-		TglSidang: b.TanggalSidang,
+		Nim:           b.Nim,
+		TanggalSidang: b.TanggalSidang,
 	})
 
 	if err != nil {

@@ -12,6 +12,7 @@ import (
 )
 
 type UpdateUserRequestBody struct {
+	Name     string `json:"name"`
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	RoleId   uint32 `json:"role_id"`
@@ -45,6 +46,7 @@ func UpdateUser(ctx *gin.Context, c pb.UserServiceClient) {
 
 	res, err := c.UpdateUser(grpcCtx, &pb.User{
 		Id:       id,
+		Name:     b.Name,
 		Username: b.Username,
 		Email:    b.Email,
 		RoleId:   b.RoleId,

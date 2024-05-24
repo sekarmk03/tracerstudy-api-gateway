@@ -17,6 +17,7 @@ func RegisterRoutes(r *gin.Engine, c *config.Config) *AuthServiceClient {
 	routes.POST("/login", svc.LoginUser)
 	routes.POST("/login-alumni", svc.LoginAlumni)
 	routes.POST("/login-userstudy", svc.LoginUserStudy)
+	routes.GET("/whoami", svc.GetCurrentUser)
 
 	return svc
 }
@@ -35,4 +36,8 @@ func (svc *AuthServiceClient) LoginAlumni(ctx *gin.Context) {
 
 func (svc *AuthServiceClient) LoginUserStudy(ctx *gin.Context) {
 	routes.LoginUserStudy(ctx, svc.Client)
+}
+
+func (svc *AuthServiceClient) GetCurrentUser(ctx *gin.Context) {
+	routes.GetCurrentUser(ctx, svc.Client)
 }
