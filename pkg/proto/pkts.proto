@@ -4,7 +4,7 @@ package tracer_study_grpc;
 option go_package = "./;pb";
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/empty.proto";
+import "pagination.proto";
 
 message PKTS {
     uint64 id = 1;
@@ -133,10 +133,15 @@ message PKTSRekapByYear {
     double status_lainnya_percentage = 13;
 }
 
+message GetAllPKTSRequest {
+    general.PaginationRequest pagination = 1;
+}
+
 message GetAllPKTSResponse {
     uint32 code = 1;
     string message = 2;
-    repeated PKTS data = 3;
+    general.Pagination pagination = 3;
+    repeated PKTS data = 4;
 }
 
 message GetPKTSByNimRequest {
@@ -161,6 +166,10 @@ message GetNimByDataAtasanResponse {
     repeated string nims = 3;
 }
 
+message ExportPKTSReportRequest {
+    string tahun_sidang = 1;
+}
+
 message ExportPKTSReportResponse {
     uint32 code = 1;
     string message = 2;
@@ -168,32 +177,32 @@ message ExportPKTSReportResponse {
 }
 
 message GetPKTSRekapByProdiRequest {
-    string kodeprodi = 1;
-    string tahun_sidang = 2;
+    general.PaginationRequest pagination = 1;
+    string kodeprodi = 2;
+    string tahun_sidang = 3;
 }
 
 message GetPKTSRekapByProdiResponse {
     uint32 code = 1;
     string message = 2;
-    repeated PKTSRekapByProdi data = 3;
+    general.Pagination pagination = 3;
+    repeated PKTSRekapByProdi data = 4;
 }
 
 message GetPKTSRekapByYearRequest {
-    string tahun_sidang = 1;
+    general.PaginationRequest pagination = 1;
+    string tahun_sidang = 2;
 }
 
 message GetPKTSRekapByYearResponse {
     uint32 code = 1;
     string message = 2;
-    repeated PKTSRekapByYear data = 3;
-}
-
-message ExportPKTSReportRequest {
-    string tahun_sidang = 1;
+    general.Pagination pagination = 3;
+    repeated PKTSRekapByYear data = 4;
 }
 
 service PKTSService {
-    rpc GetAllPKTS(google.protobuf.Empty) returns (GetAllPKTSResponse);
+    rpc GetAllPKTS(GetAllPKTSRequest) returns (GetAllPKTSResponse);
     rpc GetPKTSByNim(GetPKTSByNimRequest) returns (GetPKTSResponse);
     rpc CreatePKTS(PKTS) returns (GetPKTSResponse);
     rpc UpdatePKTS(PKTS) returns (GetPKTSResponse);

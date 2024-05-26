@@ -10,18 +10,17 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-type UpdateKabKotaRequestBody struct {
-	Nama           string `json:"nama"`
-	IdIndukWilayah string `json:"id_induk_wilayah"`
+type CreateProvinsiRequestBody struct {
+	IdWilayah string `json:"id_wilayah"`
+	Nama      string `json:"nama"`
+	Ump       uint64 `json:"ump"`
 }
 
-func UpdateKabKota(ctx *gin.Context, c pb.KabKotaServiceClient) {
-	idWil := ctx.Param("id")
-
+func CreateProvinsi(ctx *gin.Context, c pb.ProvinsiServiceClient) {
 	authorizationHeader := ctx.GetHeader("Authorization")
 	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
 
-	b := UpdateKabKotaRequestBody{}
+	b := CreateProvinsiRequestBody{}
 
 	if err := ctx.BindJSON(&b); err != nil {
 		errResp := utils.NewErrorResponse(http.StatusBadRequest, "Bad Request", "Invalid request body")
@@ -32,10 +31,10 @@ func UpdateKabKota(ctx *gin.Context, c pb.KabKotaServiceClient) {
 		return
 	}
 
-	res, err := c.UpdateKabKota(grpcCtx, &pb.KabKota{
-		IdWil:      idWil,
-		Nama:       b.Nama,
-		IdIndukWil: b.IdIndukWilayah,
+	res, err := c.CreateProvinsi(grpcCtx, &pb.Provinsi{
+		IdWil: b.IdWilayah,
+		Nama:  b.Nama,
+		Ump:   b.Ump,
 	})
 
 	if err != nil {
@@ -47,5 +46,5 @@ func UpdateKabKota(ctx *gin.Context, c pb.KabKotaServiceClient) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, &res)
+	ctx.JSON(http.StatusCreated, &res)
 }

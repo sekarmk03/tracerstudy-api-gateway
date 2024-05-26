@@ -10,18 +10,18 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-type UpdateKabKotaRequestBody struct {
-	Nama           string `json:"nama"`
-	IdIndukWilayah string `json:"id_induk_wilayah"`
+type UpdateProvinsiRequestBody struct {
+	Nama string `json:"nama"`
+	Ump  uint64 `json:"ump"`
 }
 
-func UpdateKabKota(ctx *gin.Context, c pb.KabKotaServiceClient) {
+func UpdateProvinsi(ctx *gin.Context, c pb.ProvinsiServiceClient) {
 	idWil := ctx.Param("id")
 
 	authorizationHeader := ctx.GetHeader("Authorization")
 	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
 
-	b := UpdateKabKotaRequestBody{}
+	b := UpdateProvinsiRequestBody{}
 
 	if err := ctx.BindJSON(&b); err != nil {
 		errResp := utils.NewErrorResponse(http.StatusBadRequest, "Bad Request", "Invalid request body")
@@ -32,10 +32,10 @@ func UpdateKabKota(ctx *gin.Context, c pb.KabKotaServiceClient) {
 		return
 	}
 
-	res, err := c.UpdateKabKota(grpcCtx, &pb.KabKota{
-		IdWil:      idWil,
-		Nama:       b.Nama,
-		IdIndukWil: b.IdIndukWilayah,
+	res, err := c.UpdateProvinsi(grpcCtx, &pb.Provinsi{
+		IdWil: idWil,
+		Nama:  b.Nama,
+		Ump:   b.Ump,
 	})
 
 	if err != nil {
