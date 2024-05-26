@@ -10,11 +10,10 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-func GetPKTSRekapByProdi(ctx *gin.Context, c pb.PKTSServiceClient) {
+func GetPKTSRekapByYear(ctx *gin.Context, c pb.PKTSServiceClient) {
 	authorizationHeader := ctx.GetHeader("Authorization")
 	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
 
-	kode := ctx.Param("kode")
 	tahunSidang := ctx.Param("tahunSidang")
 	limitStr := ctx.DefaultQuery("limit", "10")
 	pageStr := ctx.DefaultQuery("page", "1")
@@ -22,8 +21,7 @@ func GetPKTSRekapByProdi(ctx *gin.Context, c pb.PKTSServiceClient) {
 	limit := utils.StrParamToInt(limitStr, 10)
 	page := utils.StrParamToInt(pageStr, 1)
 
-	res, err := c.GetPKTSRekapByProdi(grpcCtx, &pb.GetPKTSRekapByProdiRequest{
-		Kodeprodi: kode,
+	res, err := c.GetPKTSRekapByYear(grpcCtx, &pb.GetPKTSRekapByYearRequest{
 		TahunSidang: tahunSidang,
 		Pagination: &pb.PaginationRequest{
 			Limit: uint32(limit),
