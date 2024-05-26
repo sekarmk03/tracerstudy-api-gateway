@@ -18,12 +18,17 @@ func RegisterRoutes(r *gin.Engine, c *config.Config) *KabKotaServiceClient {
 	routes.POST("/", svc.CreateKabKota)
 	routes.PUT("/:id", svc.UpdateKabKota)
 	routes.DELETE("/:id", svc.DeleteKabKota)
+	routes.GET("/provinsi/:provinsiId", svc.GetKabKotaByProvinsi)
 
 	return svc
 }
 
 func (svc *KabKotaServiceClient) GetAllKabKota(ctx *gin.Context) {
 	routes.GetAllKabKota(ctx, svc.Client)
+}
+
+func (svc *KabKotaServiceClient) GetKabKotaByProvinsi(ctx *gin.Context) {
+	routes.GetKabKotaByProvinsi(ctx, svc.Client)
 }
 
 func (svc *KabKotaServiceClient) GetKabKotaByIdWil(ctx *gin.Context) {
