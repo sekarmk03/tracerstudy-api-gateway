@@ -5,16 +5,14 @@ option go_package = "./;pb";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
-import "provinsi.proto";
 
 message KabKota {
     uint32 id = 1;
     string id_wil = 2;
     string nama = 3;
     string id_induk_wil = 4;
-    Provinsi provinsi = 5;
-    google.protobuf.Timestamp created_at = 6;
-    google.protobuf.Timestamp updated_at = 7;
+    google.protobuf.Timestamp created_at = 5;
+    google.protobuf.Timestamp updated_at = 6;
 }
 
 message GetAllKabKotaResponse {
@@ -40,6 +38,7 @@ message DeleteKabKotaResponse {
 
 service KabKotaService {
     rpc GetAllKabKota(google.protobuf.Empty) returns (GetAllKabKotaResponse) {};
+    rpc GetKabKotaByProvinsi(GetKabKotaByIdWilRequest) returns (GetAllKabKotaResponse) {};
     rpc GetKabKotaByIdWil(GetKabKotaByIdWilRequest) returns (GetKabKotaResponse) {};
     rpc CreateKabKota(KabKota) returns (GetKabKotaResponse) {};
     rpc UpdateKabKota(KabKota) returns (GetKabKotaResponse) {};
