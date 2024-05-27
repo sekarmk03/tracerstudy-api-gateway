@@ -11,10 +11,10 @@ import (
 )
 
 func GetRespondenByNim(ctx *gin.Context, c pb.RespondenServiceClient) {
-	nim := ctx.Param("nim")
-
 	authorizationHeader := ctx.GetHeader("Authorization")
 	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
+	
+	nim := ctx.Param("nim")
 
 	res, err := c.GetRespondenByNim(grpcCtx, &pb.GetRespondenByNimRequest{
 		Nim: nim,
