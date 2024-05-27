@@ -8,6 +8,7 @@ import (
 	"tracerstudy-api-gateway/pkg/modules/tracer/kabkota"
 	"tracerstudy-api-gateway/pkg/modules/tracer/provinsi"
 	"tracerstudy-api-gateway/pkg/modules/tracer/pkts"
+	"tracerstudy-api-gateway/pkg/modules/tracer/prodi"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,6 +27,7 @@ func main() {
 	kabkota.RegisterRoutes(r, &c)
 	provinsi.RegisterRoutes(r, &c)
 	pkts.RegisterRoutes(r, &c)
+	prodi.RegisterRoutes(r, &c)
 
 	r.Run(c.Port)
 }
