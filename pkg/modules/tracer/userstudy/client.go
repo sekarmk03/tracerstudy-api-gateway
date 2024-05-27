@@ -1,4 +1,4 @@
-package pkts
+package userstudy
 
 import (
 	"tracerstudy-api-gateway/pkg/config"
