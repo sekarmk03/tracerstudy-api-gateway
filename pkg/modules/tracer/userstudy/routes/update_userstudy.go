@@ -13,7 +13,6 @@ import (
 type UpdateUserStudyRequestBody struct {
 	EmailResponden                    string `json:"email_responden"`
 	HpResponden                       string `json:"hp_responden"`
-	NimLulusan                        string `json:"nim_lulusan"`
 	LamaMengenalLulusan               uint32 `json:"lama_mengenal_lulusan"`
 	Etika                             string `json:"etika"`
 	KeahlianBidIlmu                   string `json:"keahlian_bid_ilmu"`
@@ -44,10 +43,12 @@ func UpdateUserStudy(ctx *gin.Context, c pb.UserStudyServiceClient) {
 		return
 	}
 
+	nim := ctx.Param("nim")
+
 	res, err := c.UpdateUserStudy(grpcCtx, &pb.UserStudy{
 		EmailResponden:                    b.EmailResponden,
 		HpResponden:                       b.HpResponden,
-		NimLulusan:                        b.NimLulusan,
+		NimLulusan:                        nim,
 		LamaMengenalLulusan:               b.LamaMengenalLulusan,
 		Etika:                             b.Etika,
 		KeahlianBidIlmu:                   b.KeahlianBidIlmu,
