@@ -15,11 +15,11 @@ func RegisterRoutes(r *gin.Engine, c *config.Config) *PKTSServiceClient {
 	routes := r.Group("/pkts")
 	routes.GET("/", svc.GetAllPKTS)
 	routes.GET("/:nim", svc.GetPKTSByNim)
-	routes.GET("/:tahunSidang", svc.GetPKTSRekapByYear)
-	routes.GET("/:tahunSidang/:kode", svc.GetPKTSRekapByProdi)
+	routes.GET("/rekap/:tahunSidang", svc.GetPKTSRekapByYear)
+	routes.GET("/rekap/:tahunSidang/:kode", svc.GetPKTSRekapByProdi)
 	routes.POST("/", svc.CreatePKTS)
 	routes.PUT("/:nim", svc.UpdatePKTS)
-	routes.GET("/export/:tahunSidang", svc.ExportPKTSReport)
+	routes.GET("/export/:tahun", svc.ExportPKTSReport)
 
 	return svc
 }
