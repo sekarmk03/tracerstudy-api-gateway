@@ -8,14 +8,24 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 func GetAllResponden(ctx *gin.Context, c pb.RespondenServiceClient) {
 	authorizationHeader := ctx.GetHeader("Authorization")
 	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
 
-	res, err := c.GetAllResponden(grpcCtx, &emptypb.Empty{})
+	limitStr := ctx.DefaultQuery("limit", "10")
+	pageStr := ctx.DefaultQuery("page", "1")
+
+	limit := utils.StrParamToInt(limitStr, 10)
+	page := utils.StrParamToInt(pageStr, 1)
+
+	res, err := c.GetAllResponden(grpcCtx, &pb.GetAllRespondenRequest{
+		Pagination: &pb.PaginationRequest{
+			Limit: uint32(limit),
+			Page:  uint32(page),
+		},
+	})
 
 	if err != nil {
 		errResp := utils.GetGrpcError(err)
