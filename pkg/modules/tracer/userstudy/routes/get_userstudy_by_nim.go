@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-type GetUserStudyByNimRequest struct {
+type GetUserStudyByNimRequestBody struct {
 	Nim            string `json:"nim"`
 	EmailResponden string `json:"email_responden"`
 	HpResponden    string `json:"hp_responden"`
@@ -20,7 +20,7 @@ func GetUserStudyByNim(ctx *gin.Context, c pb.UserStudyServiceClient) {
 	authorizationHeader := ctx.GetHeader("Authorization")
 	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
 
-	b := GetUserStudyByNimRequest{}
+	b := GetUserStudyByNimRequestBody{}
 
 	if err := ctx.BindJSON(&b); err != nil {
 		errResp := utils.NewErrorResponse(http.StatusBadRequest, "Bad Request", "Invalid request body")

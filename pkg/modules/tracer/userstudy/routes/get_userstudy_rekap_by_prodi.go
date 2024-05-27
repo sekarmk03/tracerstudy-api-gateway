@@ -16,8 +16,18 @@ func GetUserStudyRekapByProdi(ctx *gin.Context, c pb.UserStudyServiceClient) {
 
 	kode := ctx.Param("kode")
 
+	limitStr := ctx.DefaultQuery("limit", "10")
+	pageStr := ctx.DefaultQuery("page", "1")
+
+	limit := utils.StrParamToInt(limitStr, 10)
+	page := utils.StrParamToInt(pageStr, 1)
+
 	res, err := c.GetUserStudyRekapByProdi(grpcCtx, &pb.GetUserStudyRekapByProdiRequest{
 		KodeProdi: kode,
+		Pagination: &pb.PaginationRequest{
+			Limit: uint32(limit),
+			Page:  uint32(page),
+		},
 	})
 
 	if err != nil {
