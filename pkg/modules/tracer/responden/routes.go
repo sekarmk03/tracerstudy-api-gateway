@@ -46,3 +46,7 @@ func (svc *RespondenServiceClient) UpdateResponden(ctx *gin.Context) {
 func (svc *RespondenServiceClient) GetRespondenByNimList(ctx *gin.Context) {
 	routes.GetRespondenByNimList(ctx, svc.Client)
 }
+
+func (svc *RespondenServiceClient) GetOrCreateResponden(ctx *gin.Context) {
+	routes.GetOrCreateResponden(ctx, svc.Client)
+}
