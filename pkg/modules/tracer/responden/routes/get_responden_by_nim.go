@@ -10,23 +10,71 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-func GetRespondenByNim(ctx *gin.Context, c pb.RespondenServiceClient) {
+func GetRespondenByNim(ctx *gin.Context, cr pb.RespondenServiceClient) {
 	authorizationHeader := ctx.GetHeader("Authorization")
 	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
 	
 	nim := ctx.Param("nim")
 
-	res, err := c.GetRespondenByNim(grpcCtx, &pb.GetRespondenByNimRequest{
+	res, err := cr.GetRespondenByNim(grpcCtx, &pb.GetRespondenByNimRequest{
 		Nim: nim,
 	})
 
 	if err != nil {
 		errResp := utils.GetGrpcError(err)
-		ctx.AbortWithStatusJSON(
-			errResp.Code,
-			errResp,
-		)
-		return
+		if errResp.Code == http.StatusNotFound {
+			// create responden
+			_, err := cr.CreateResponden(grpcCtx, &pb.CreateRespondenRequest{
+				Nim: nim,
+			})
+
+			if err != nil {
+				errResp := utils.GetGrpcError(err)
+				ctx.AbortWithStatusJSON(
+					errResp.Code,
+					errResp,
+				)
+				return
+			}
+
+			resUpdate, err := cr.UpdateRespondenFromSiak(grpcCtx, &pb.UpdateRespondenFromSiakRequest{
+				Nim: nim,
+			})
+
+			if err != nil {
+				errResp := utils.GetGrpcError(err)
+				ctx.AbortWithStatusJSON(
+					errResp.Code,
+					errResp,
+				)
+				return
+			}
+
+			ctx.JSON(http.StatusOK, &resUpdate)
+		} else {
+			ctx.AbortWithStatusJSON(
+				errResp.Code,
+				errResp,
+			)
+			return
+		}
+	}
+
+	if res.Data.StatusUpdate == 0 {
+		resUpdate, err := cr.UpdateRespondenFromSiak(grpcCtx, &pb.UpdateRespondenFromSiakRequest{
+			Nim: nim,
+		})
+
+		if err != nil {
+			errResp := utils.GetGrpcError(err)
+			ctx.AbortWithStatusJSON(
+				errResp.Code,
+				errResp,
+			)
+			return
+		}
+
+		ctx.JSON(http.StatusOK, &resUpdate)
 	}
 
 	ctx.JSON(http.StatusOK, &res)
