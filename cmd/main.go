@@ -11,6 +11,7 @@ import (
 	"tracerstudy-api-gateway/pkg/modules/tracer/prodi"
 	"tracerstudy-api-gateway/pkg/modules/tracer/responden"
 	"tracerstudy-api-gateway/pkg/modules/tracer/userstudy"
+	"tracerstudy-api-gateway/pkg/modules/post/post"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,6 +33,7 @@ func main() {
 	prodi.RegisterRoutes(r, &c)
 	responden.RegisterRoutes(r, &c)
 	userstudy.RegisterRoutes(r, &c)
+	post.RegisterRoutes(r, &c)
 
 	r.Run(c.Port)
 }
