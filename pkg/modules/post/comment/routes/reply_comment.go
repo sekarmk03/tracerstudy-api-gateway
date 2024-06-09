@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"strconv"
 	"tracerstudy-api-gateway/pkg/pb"
 	"tracerstudy-api-gateway/pkg/utils"
 
@@ -9,14 +10,23 @@ import (
 )
 
 type ReplyCommentRequestBody struct {
-	CommentId uint64 `json:"comment_id"`
-	Name      string `json:"name"`
-	Content   string `json:"content"`
+	Name    string `json:"name"`
+	Content string `json:"content"`
 }
 
 func ReplyComment(ctx *gin.Context, c pb.CommentServiceClient) {
+	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
+	if err != nil {
+		errResp := utils.NewErrorResponse(http.StatusBadRequest, "Bad Request", "Failed to convert id to int")
+		ctx.AbortWithStatusJSON(
+			http.StatusBadRequest,
+			errResp,
+		)
+		return
+	}
+
 	var reqBody ReplyCommentRequestBody
-	err := ctx.BindJSON(&reqBody)
+	err = ctx.BindJSON(&reqBody)
 
 	if err != nil {
 		errResp := utils.NewErrorResponse(http.StatusBadRequest, "Bad Request", "Failed to bind request body")
@@ -28,7 +38,7 @@ func ReplyComment(ctx *gin.Context, c pb.CommentServiceClient) {
 	}
 
 	res, err := c.ReplyComment(ctx, &pb.Comment{
-		CommentId: reqBody.CommentId,
+		CommentId: id,
 		Name:      reqBody.Name,
 		Content:   reqBody.Content,
 	})
