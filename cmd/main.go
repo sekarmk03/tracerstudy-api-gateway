@@ -5,13 +5,14 @@ import (
 	"tracerstudy-api-gateway/pkg/config"
 	"tracerstudy-api-gateway/pkg/modules/auth/auth"
 	"tracerstudy-api-gateway/pkg/modules/auth/user"
+	"tracerstudy-api-gateway/pkg/modules/post/comment"
+	"tracerstudy-api-gateway/pkg/modules/post/post"
 	"tracerstudy-api-gateway/pkg/modules/tracer/kabkota"
-	"tracerstudy-api-gateway/pkg/modules/tracer/provinsi"
 	"tracerstudy-api-gateway/pkg/modules/tracer/pkts"
 	"tracerstudy-api-gateway/pkg/modules/tracer/prodi"
+	"tracerstudy-api-gateway/pkg/modules/tracer/provinsi"
 	"tracerstudy-api-gateway/pkg/modules/tracer/responden"
 	"tracerstudy-api-gateway/pkg/modules/tracer/userstudy"
-	"tracerstudy-api-gateway/pkg/modules/post/post"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,6 +35,7 @@ func main() {
 	responden.RegisterRoutes(r, &c)
 	userstudy.RegisterRoutes(r, &c)
 	post.RegisterRoutes(r, &c)
+	comment.RegisterRoutes(r, &c)
 
 	r.Run(c.Port)
 }
