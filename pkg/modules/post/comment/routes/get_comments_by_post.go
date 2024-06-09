@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetCommentById(ctx *gin.Context, c pb.CommentServiceClient) {
+func GetCommentsByPost(ctx *gin.Context, c pb.CommentServiceClient) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
 
 	if err != nil {
@@ -21,7 +21,9 @@ func GetCommentById(ctx *gin.Context, c pb.CommentServiceClient) {
 		return
 	}
 
-	res, err := c.GetCommentById(ctx, &pb.GetCommentByIdRequest{Id: id})
+	res, err := c.GetCommentsByPostId(ctx, &pb.GetCommentsByPostIdRequest{
+		PostId: id,
+	})
 
 	if err != nil {
 		errResp := utils.GetGrpcError(err)
