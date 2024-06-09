@@ -15,6 +15,7 @@ func RegisterRoutes(r *gin.Engine, c *config.Config) *RespondenServiceClient {
 	routes := r.Group("/responden")
 	routes.GET("/", svc.GetAllResponden)
 	routes.GET("/:nim", svc.GetRespondenByNim)
+	routes.GET("/:nim/create", svc.GetOrCreateResponden)
 	routes.GET("/siak/:nim", svc.UpdateRespondenFromSiak)
 	routes.POST("/", svc.CreateResponden)
 	routes.PUT("/:nim", svc.UpdateResponden)
