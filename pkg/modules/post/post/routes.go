@@ -15,6 +15,7 @@ func RegisterRoutes(r *gin.Engine, c *config.Config) *PostServiceClient {
 	routes := r.Group("/posts")
 	routes.GET("/", svc.GetAllPosts)
 	routes.GET("/:id", svc.GetPostById)
+	routes.GET("/:id/visitor", svc.AddVisitor)
 	routes.DELETE("/:id", svc.DeletePost)
 
 	return svc
@@ -30,4 +31,8 @@ func (svc *PostServiceClient) GetPostById(ctx *gin.Context) {
 
 func (svc *PostServiceClient) DeletePost(ctx *gin.Context) {
 	routes.DeletePost(ctx, svc.Client)
+}
+
+func (svc *PostServiceClient) AddVisitor(ctx *gin.Context) {
+	routes.AddVisitor(ctx, svc.Client)
 }
