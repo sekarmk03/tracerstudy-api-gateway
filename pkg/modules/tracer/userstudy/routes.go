@@ -16,6 +16,7 @@ func RegisterRoutes(r *gin.Engine, c *config.Config) *UserStudyServiceClient {
 	routes.GET("/", svc.GetAllUserStudy)
 	routes.POST("/:nim", svc.GetUserStudyByNim)
 	routes.POST("/", svc.CreateUserStudy)
+	routes.POST("/alumni", svc.GetAlumniListByAtasan)
 	routes.PUT("/:nim", svc.UpdateUserStudy)
 	routes.GET("/export", svc.ExportUSReport)
 	routes.GET("/rekap", svc.GetUserStudyRekap)
@@ -50,4 +51,8 @@ func (svc *UserStudyServiceClient) GetUserStudyRekap(ctx *gin.Context) {
 
 func (svc *UserStudyServiceClient) GetUserStudyRekapByProdi(ctx *gin.Context) {
 	routes.GetUserStudyRekapByProdi(ctx, svc.Client)
+}
+
+func (svc *UserStudyServiceClient) GetAlumniListByAtasan(ctx *gin.Context) {
+	routes.GetAlumniListByAtasan(ctx, svc.Client)
 }
