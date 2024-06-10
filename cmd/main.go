@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 	"tracerstudy-api-gateway/pkg/config"
 	"tracerstudy-api-gateway/pkg/modules/auth/auth"
 	"tracerstudy-api-gateway/pkg/modules/auth/user"
@@ -14,6 +15,7 @@ import (
 	"tracerstudy-api-gateway/pkg/modules/tracer/responden"
 	"tracerstudy-api-gateway/pkg/modules/tracer/userstudy"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,6 +27,15 @@ func main() {
 	}
 
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{c.FeOriginUrl},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	auth.RegisterRoutes(r, &c)
 	user.RegisterRoutes(r, &c)

@@ -3,10 +3,13 @@ package config
 import "github.com/spf13/viper"
 
 type Config struct {
-	Port         string `mapstructure:"PORT"`
-	AuthSvcUrl   string `mapstructure:"AUTH_SVC_URL"`
-	PostSvcUrl   string `mapstructure:"POST_SVC_URL"`
-	TracerSvcUrl string `mapstructure:"TRACER_SVC_URL"`
+	Port               string `mapstructure:"PORT"`
+	AuthSvcUrl         string `mapstructure:"AUTH_SVC_URL"`
+	PostSvcUrl         string `mapstructure:"POST_SVC_URL"`
+	TracerSvcUrl       string `mapstructure:"TRACER_SVC_URL"`
+	DatapipelineSvcUrl string `mapstructure:"DATAPIPELINE_SVC_URL"`
+	SiakSvcUrl         string `mapstructure:"SIAK_SVC_URL"`
+	FeOriginUrl        string `mapstructure:"FE_ORIGIN_URL"`
 }
 
 func LoadConfig() (c Config, err error) {
