@@ -13,7 +13,7 @@ import (
 func GetOrCreateResponden(ctx *gin.Context, c pb.RespondenServiceClient) {
 	authorizationHeader := ctx.GetHeader("Authorization")
 	grpcCtx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("authorization", authorizationHeader))
-	
+
 	nim := ctx.Param("nim")
 
 	res, err := c.GetOrCreateResponden(grpcCtx, &pb.GetRespondenByNimRequest{
