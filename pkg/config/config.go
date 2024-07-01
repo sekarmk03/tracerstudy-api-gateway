@@ -10,6 +10,8 @@ type Config struct {
 	DatapipelineSvcUrl string `mapstructure:"DATAPIPELINE_SVC_URL"`
 	SiakSvcUrl         string `mapstructure:"SIAK_SVC_URL"`
 	FeOriginUrl        string `mapstructure:"FE_ORIGIN_URL"`
+	SSLCert            string `mapstructure:"SSL_CERT"`
+	SSLKey             string `mapstructure:"SSL_KEY"`
 }
 
 func LoadConfig() (c Config, err error) {

@@ -48,5 +48,9 @@ func main() {
 	post.RegisterRoutes(r, &c)
 	comment.RegisterRoutes(r, &c)
 
-	r.Run(c.Port)
+	// r.Run(c.Port)
+
+	if err := r.RunTLS(c.Port, c.SSLCert, c.SSLKey); err != nil {
+		log.Fatalln("ERROR: Could not start server:", err)
+	}
 }
